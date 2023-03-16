@@ -21,7 +21,7 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
     {{-- custom css --}}
-    <link rel="stylesheet" href="{{asset('custom_css/style.css')}}">
+    <link rel="stylesheet" href="{{ asset('custom_css/style.css') }}">
 </head>
 <!--Coded With Love By Mutiullah Samim-->
 
@@ -138,7 +138,7 @@
                             </ul>
                         </div>
                     </div>
-                    <div class="card-body msg_card_body">
+                    <div id="msg_cotainer_send" class="card-body msg_card_body">
                         <div class="d-flex justify-content-start mb-4">
                             <div class="img_cont_msg">
                                 <img src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg"
@@ -190,7 +190,7 @@
                             </div>
                         </div>
                         <div class="d-flex justify-content-end mb-4">
-                            <div class="msg_cotainer_send">
+                            <div id="msg_cotainer_send" class="msg_cotainer_send">
                                 Ok, thank you have a good day
                                 <span class="msg_time_send">9:10 AM, Today</span>
                             </div>
@@ -212,13 +212,17 @@
                     </div>
                     <div class="card-footer">
                         <div class="input-group">
-                            <div class="input-group-append">
+                            {{-- <div class="input-group-append">
                                 <span class="input-group-text attach_btn"><i class="fas fa-paperclip"></i></span>
-                            </div>
-                            <textarea name="" class="form-control type_msg" placeholder="Type your message..."></textarea>
-                            <div class="input-group-append">
-                                <span class="input-group-text send_btn"><i class="fas fa-location-arrow"></i></span>
-                            </div>
+                            </div> --}}
+                            <form class="input-group" action="" method="post" enctype="multipart/form-data">
+                                @csrf
+                                <textarea id="chat-box" name="" class="form-control type_msg" placeholder="Type your message..."></textarea>
+                                <div class="input-group-append">
+                                    <button id="chat-button" type="submit" class="input-group-text send_btn"><i
+                                            class="fas fa-location-arrow"></i></button>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -231,6 +235,38 @@
         $('#action_menu_btn').click(function() {
             $('.action_menu').toggle();
         });
+
+        // get input value
+        $('#chat-button').click(function(e) {
+            e.preventDefault();
+            const inputValue = $('#chat-box').val();
+            $.ajax({
+                url: "{{ route('chatbot') }}",
+                method: "POST",
+                dataType: "html",
+                data: {
+                    'inputValue': inputValue,
+                    _token: '{{csrf_token()}}'
+                },
+                success: function(data) {
+
+                },
+
+            });
+
+
+            // append user message to inbox
+            // $('#msg_cotainer_send').append(`<div  class="d-flex justify-content-end mb-4"><div id="msg_cotainer_send" class="msg_cotainer_send">${inputValue}
+            //                     <span class="msg_time_send">9:10 AM, Today</span>
+            //                 </div>
+            //                 <div class="img_cont_msg">
+            //                     <img src=""
+            //                         class="rounded-circle user_img_msg">
+            //                 </div>
+            //             </div>`);
+            console.log("result = ", inputValue);
+        });
+
     });
 </script>
 

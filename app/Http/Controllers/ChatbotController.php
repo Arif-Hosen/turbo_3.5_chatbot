@@ -11,7 +11,7 @@ class ChatbotController extends Controller
         
 
         if($request->isMethod('POST')){
-            
+            return ($request->inputValue);
             $open_ai_key = getenv('OPENAI_API_KEY');
         $open_ai = new OpenAi($open_ai_key);
         

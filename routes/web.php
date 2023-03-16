@@ -14,4 +14,4 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::match(['get','post'],'/', [ChatbotController::class,'create']);
+Route::match(['get','post'],'/', [ChatbotController::class,'create'])->name('chatbot');
