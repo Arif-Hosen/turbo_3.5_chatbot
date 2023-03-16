@@ -8,7 +8,11 @@ use Orhanerday\OpenAi\OpenAi;
 class ChatbotController extends Controller
 {
     public function create(Request $request){
-        $open_ai_key = getenv('OPENAI_API_KEY');
+        
+
+        if($request->isMethod('POST')){
+            
+            $open_ai_key = getenv('OPENAI_API_KEY');
         $open_ai = new OpenAi($open_ai_key);
         
         $complete = $open_ai->chat([
@@ -20,11 +24,11 @@ class ChatbotController extends Controller
                 ],
                 [
                     "role" => "user",
-                    "content" => "What type of products you have?"
+                    "content" => "Tell me about Zainik Labs?"
                 ],
                 [
                     "role" => "assistant",
-                    "content" => "We provide the web, android, ios application system"
+                    "content" => "Zainik Lab started its journey in 2015 as an individual endeavor. In 2017, Zainik Lab took the form of a full-fledged UI/UX agency."
                 ],
                 [
                     "role" => "user",
@@ -37,13 +41,9 @@ class ChatbotController extends Controller
             'presence_penalty' => 0,
          ]);
          
-         return ($complete);
-
-        if($request->isMethod('POST')){
-            
-            
+         return json_decode($complete)?->choices[0]->message->content;
             // $open_ai = new OpenAi($open_ai_key);
         }
-        return view('welcome');
+        return view('chatbot.index');
     }
 }
